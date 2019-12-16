@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biblioteca.Web", "Biblioteca\Biblioteca.Web.csproj", "{EC9DA563-24AD-42EE-A5E7-EC99394FE371}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vidioteca", "Vidioteca\Vidioteca.csproj", "{9D14EEE7-C826-4C76-905F-C5DE44CD7162}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EC9DA563-24AD-42EE-A5E7-EC99394FE371} = {EC9DA563-24AD-42EE-A5E7-EC99394FE371}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

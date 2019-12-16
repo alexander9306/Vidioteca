@@ -5,13 +5,11 @@ using System.Data.SqlClient;
 using System.Text;
 using Biblioteca.Entidades;
 
-namespace Biblioteca.Datos
+namespace Biblioteca.Web.Datos
 {
     public class Core_Elenco
     {
-        //Debe cambiar el string de conexion aqui
-        static string conexion_string = @"Data Source=NAUSDOM6K6ZF72\SQLACM;Integrated Security=SSPI;Initial Catalog=ACM";
-        SqlConnection conexion = new SqlConnection(conexion_string);
+        SqlConnection conexion = new SqlConnection(db.GetConfiguration());
         SqlCommand cmd;
 
         private readonly Core_Pelicula _pelicula = new Core_Pelicula();

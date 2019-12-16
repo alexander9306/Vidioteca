@@ -5,22 +5,19 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using System.Configuration;
+using Biblioteca.Web.Datos;
 
-namespace Biblioteca.Datos
+namespace Biblioteca.Web.Datos
 {
     public class Core_Actor
     {
-
-        //Debe cambiar el string de conexion aqui
-       // static string conStr = ConfigurationManager.ConnectionStrings["Conexion"].ToString();
-        
-        static string conexion_string = "Data Source=DESKTOP-1MG6DKU;Initial Catalog=dbBiblioteca;Integrated Security=True";
-        SqlConnection conexion = new SqlConnection(conexion_string);
+        SqlConnection conexion = new SqlConnection(db.GetConfiguration());
         SqlCommand cmd;
 
         //Crear un actor
         public void CrearActor(Actor actor)
         {
+
             cmd = new SqlCommand("insert into actor(nombre, fechanac, sexo, idfoto) values(@nombre,@fechanac,@sexo,@idfoto)", conexion);
             conexion.Open();
             cmd.Parameters.AddWithValue("@nombre", actor.nombre);

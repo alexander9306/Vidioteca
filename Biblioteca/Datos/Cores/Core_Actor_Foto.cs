@@ -5,23 +5,22 @@ using System.Data.SqlClient;
 using System.Text;
 using Biblioteca.Entidades;
 
-namespace Biblioteca.Datos
+namespace Biblioteca.Web.Datos
 {
-    public class Core_Pelicula_Foto
+    public class Core_Actor_Foto
     {
-        static string conexion_string = "Data Source=DESKTOP-1MG6DKU;Initial Catalog=dbBiblioteca;Integrated Security=True";
-        SqlConnection conexion = new SqlConnection(conexion_string);
+        SqlConnection conexion = new SqlConnection(db.GetConfiguration());
         SqlCommand cmd;
 
         //Crear una nueva foto
-        public int CrearFoto(byte[] pfoto)
+        public int CrearFoto(byte[] afoto)
         {
             conexion.Open();
-            cmd = new SqlCommand("insert into pelicula_foto(foto) values(@foto)", conexion);
+            cmd = new SqlCommand("insert into actor_foto(foto) values(@foto)", conexion);
 
-            if (pfoto != null)
+            if (afoto != null)
             {
-                cmd.Parameters.AddWithValue("@foto", pfoto);
+                cmd.Parameters.AddWithValue("@foto", afoto);
             }
             else
             {
@@ -36,17 +35,17 @@ namespace Biblioteca.Datos
         }
 
         //Cargar una foto
-        public Pelicula_Foto CargarFoto(int? idfoto)
+        public Actor_Foto CargarFoto(int? idfoto)
         {
-            Pelicula_Foto foto = new Pelicula_Foto();
-
+            Actor_Foto foto = new Actor_Foto();
+            
             if (idfoto == null)
             {
                 return foto;
             }
 
             conexion.Open();
-            cmd = new SqlCommand("SELECT * FROM pelicula_foto where idfoto=@idfoto", conexion);
+            cmd = new SqlCommand("SELECT * FROM actor_foto where idfoto=@idfoto", conexion);
             cmd.Parameters.AddWithValue("@idfoto", idfoto);
             SqlDataReader rdr = cmd.ExecuteReader();
             rdr.Read();
@@ -62,7 +61,7 @@ namespace Biblioteca.Datos
         //Actualizar una foto
         public void ActualizarFoto(int idfoto, byte[] foto)
         {
-            cmd = new SqlCommand("update pelicula_foto set foto=@foto where idfoto=@idfoto", conexion);
+            cmd = new SqlCommand("update actor_foto set foto=@foto where idfoto=@idfoto", conexion);
             conexion.Open();
             cmd.Parameters.AddWithValue("@idfoto", idfoto);
 
@@ -78,5 +77,6 @@ namespace Biblioteca.Datos
 
             conexion.Close();
         }
+
     }
 }

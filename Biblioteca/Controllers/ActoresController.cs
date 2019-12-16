@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Biblioteca.Datos;
 using Biblioteca.Entidades;
+using Biblioteca.Web.Datos;
 using Biblioteca.Web.Models;
 using Biblioteca.Web.Models.Actor;
 using Microsoft.AspNetCore.Http;
@@ -25,27 +25,34 @@ namespace Biblioteca.Web.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> Listar()
         {
-            
-            var actores =_actor.CargarActores();
-            if (actores.Count() >= 1)
+            try
             {
-                var lstmodel = new List<ActorViewModel>();
-
-                foreach (var actor in actores)
+                var actores = _actor.CargarActores();
+                if (actores.Count() >= 1)
                 {
-                    var model = new ActorViewModel();
-                    model.idactor = actor.idactor;
-                    model.nombre = actor.nombre;
-                    model.fechanac = actor.fechanac;
-                    model.sexo = actor.sexo;
-                    model.foto = _foto.CargarFoto(actor.idfoto).foto;
+                    var lstmodel = new List<ActorViewModel>();
 
-                    lstmodel.Add(model);
+                    foreach (var actor in actores)
+                    {
+                        var model = new ActorViewModel();
+                        model.idactor = actor.idactor;
+                        model.nombre = actor.nombre;
+                        model.fechanac = actor.fechanac;
+                        model.sexo = actor.sexo;
+                        model.foto = _foto.CargarFoto(actor.idfoto).foto;
+
+                        lstmodel.Add(model);
+                    }
+                    return Ok(lstmodel);
                 }
-                return Ok(lstmodel);
-            }
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+           
 
         }
 

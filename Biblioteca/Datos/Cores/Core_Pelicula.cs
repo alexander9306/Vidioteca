@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace Biblioteca.Datos
+namespace Biblioteca.Web.Datos
 {
     public class Core_Pelicula
     {
-        //Debe cambiar el string de conexion aqui
-        static string conexion_string = @"Data Source=NAUSDOM6K6ZF72\SQLACM;Integrated Security=SSPI;Initial Catalog=ACM";
-        SqlConnection conexion = new SqlConnection(conexion_string);
+        SqlConnection conexion = new SqlConnection(db.GetConfiguration());
         SqlCommand cmd;
 
         //Crear una pelicula
