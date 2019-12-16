@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "CrearActor";
+}
+
+<h1>CrearActor</h1>
+
+@model Actor
+@{ Layout = "_Layout"; ViewBag.Title = "Add a Reservation";}
+ 
+<h2>Add a Reservation <a asp-action="Index" class="btn btn-sm btn-secondary">Back</a></h2>
+<form asp-action="Crear" method="post">
+    <div class="form-group">
+        <label for="Name">nombre:</label>
+        <input class="form-control" name="nombre" />
+    </div>
+    <div class="form-group">
+        <label for="StartLocation">sexo:</label>
+        <input class="form-control" name="sexo" />
+    </div>
+    <div class="form-group">
+        <label for="StartLocation">fechanac:</label>
+        <input class="form-control" name="fechanac" />
+    </div>
+    <div class="form-group">
+        <label for="StartLocation">foto:</label>
+        <input class="form-control" name="foto" />
+    </div>
+    <div class="text-center panel-body">
+        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+    </div>
+</form>
+ 
+@if (Model != null)
+{
+    <h2>Reservation</h2>
+    <table class="table table-sm table-striped table-bordered m-2">
+        <thead><tr><th>ID</th><th>Name</th><th>Start Location</th><th>End Location</th></tr></thead>
+        <tbody>
+        <tr>
+            <td>@Model.idactor</td>
+            <td>@Model.nombre</td>
+            <td>@Model.sexo</td>
+            <td>@Model.fechanac</td>
+            <td>@Model.foto</td>
+        </tr>
+        </tbody>
+    </table>
+}

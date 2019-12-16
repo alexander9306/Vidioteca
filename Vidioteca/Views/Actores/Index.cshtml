@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Actor>
+@{ Layout = "_Layout"; ViewBag.Title = "Todos los actores";}
+ 
+<h2>Todos los actores</h2>
+<a asp-action="Crear" class="btn btn-sm btn-primary">Crear Actor</a>
+<table class="table table-sm table-striped table-bordered m-2">
+
+    <thead><tr><th>ID</th><th>Foto</th><th>Nombre</th><th>Fecha Nac</th><th>Sexo</th><th>Actualizar</th><th>Eliminar</th></tr></thead>
+    <tbody>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle"
+                type="button" id="dropdownMenu1" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            Sexo
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <a asp-action="Sexo" asp-route-sexo="m" class="text-warning">Masculino</a>
+            <a asp-action="Sexo" asp-route-sexo="f" class="text-warning">Femenino</a>
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        @foreach (var actor in Model)
+        {
+            <tr>
+                <td>@actor.idactor</td>
+                <td width="80" height="80">
+                    @{var imgSrc = String.Format("data:image/jpg;base64,{0}", actor.foto); }
+                    <img src="@imgSrc"/> </td>
+                <td>@actor.nombre</td>
+                <td>@actor.fechanac.ToString("dd/M/yyyy")</td>
+                <td>@actor.sexo</td>
+                <td>
+                    <a asp-action="Actualizar" asp-route-id="@actor.idactor" class="text-warning">Actualizar</a>
+                </td>
+                <td>
+                    <a asp-action="EliminarVista" asp-route-id="@actor.idactor" class="text-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr class="text-danger">No hay Registros creados</tr>
+    }
+    </tbody>
+</table>

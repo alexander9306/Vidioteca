@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Eliminar";
+}
+
+<h1>Eliminar</h1>
+
+@model Actor
+
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet">
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
+
+<div action="" id='frm_general'>
+
+    <input type="hidden" name="estado" class="custom-control-input" id="defaultInline1">
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Eliminar persona</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">  &times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Desea borrar a @Model.nombre 
+                    
+                    <form asp-action="Eliminar" method="post" id="frm_borrar">
+                        <input type="hidden" value="@Model.idactor" name="idactor" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a asp-action="Index" class="btn btn-secondary" role="button">Cancelar</a>
+                    <button type="button" onclick="someter()" class="btn btn-danger">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $("#exampleModalCenter").modal({ show: true });
+
+    function someter() {
+        document.getElementById('frm_borrar').submit();
+    }
+</script>
