@@ -6,31 +6,32 @@
 <h1>CrearActor</h1>
 
 @model Actor
-@{ Layout = "_Layout"; ViewBag.Title = "Add a Reservation";}
+@{ Layout = "_Layout"; ViewBag.Title = "Agregar Actor";}
  
-<h2>Add a Reservation <a asp-action="Index" class="btn btn-sm btn-secondary">Back</a></h2>
 <form asp-action="Crear" method="post">
     <div class="form-group">
-        <label for="Name">nombre:</label>
-        <input class="form-control" name="nombre" />
+        <label asp-for="nombre">Nombre</label>
+        <input class="form-control" asp-for="nombre" />
     </div>
     <div class="form-group">
-        <label for="StartLocation">sexo:</label>
-        <input class="form-control" name="sexo" />
+        <label>Sexo</label>
+        <select class="form-control" name="sexo">
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+        </select>
     </div>
     <div class="form-group">
-        <label for="StartLocation">fechanac:</label>
-        <input class="form-control" name="fechanac" />
+        <label asp-for="fechanac">Fecha Nacimiento</label>
+        <input class="form-control" type="date" asp-for="fechanac" />
     </div>
     <div class="form-group">
-        <label for="StartLocation">foto:</label>
-        <input class="form-control" name="foto" />
+        <label asp-for="foto">Foto</label>
+        <input class="form-control" type="file" asp-for="foto" />
     </div>
     <div class="text-center panel-body">
-        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+        <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
     </div>
 </form>
- 
 @if (Model != null)
 {
     <h2>Reservation</h2>

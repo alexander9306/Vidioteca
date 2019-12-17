@@ -8,7 +8,7 @@
 @model Actor
 @{ Layout = "_Layout"; ViewBag.Title = "Actualizar Actor";}
  
-<form asp-action="Actualizar" method="post">
+<form method="post">
     <div class="form-group">
         <label asp-for="idactor">ID</label>
         <input class="form-control" asp-for="idactor" readonly />
@@ -18,7 +18,8 @@
         <input class="form-control" asp-for="nombre" />
     </div>
     <div class="form-group">
-        <select class="form-control" name="sexo">
+        <label >Sexo</label>
+        <select class="form-control" asp-for="sexo">
             <option value="M">Masculino</option>
             <option value="F">Femenino</option>
         </select>

@@ -93,6 +93,7 @@ namespace Vidioteca.Controllers
                 using (var response = await httpClient.GetAsync("http://localhost:14574/api/actores/mostrar/" + id))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
+                    actor = JsonConvert.DeserializeObject<Actor>(apiResponse);
                 }
             }
             return View(actor);
