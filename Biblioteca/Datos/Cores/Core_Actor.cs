@@ -15,18 +15,19 @@ namespace Biblioteca.Web.Datos
         SqlCommand cmd;
 
         //Crear un actor
-        public void CrearActor(Actor actor)
+        public int CrearActor(Actor actor)
         {
 
-            cmd = new SqlCommand("insert into actor(nombre, fechanac, sexo, idfoto) values(@nombre,@fechanac,@sexo,@idfoto)", conexion);
+            cmd = new SqlCommand("insert into actor(nombre, fechanac, sexo) values(@nombre,@fechanac,@sexo); SELECT SCOPE_IDENTITY()", conexion);
             conexion.Open();
             cmd.Parameters.AddWithValue("@nombre", actor.nombre);
             cmd.Parameters.AddWithValue("@fechanac", actor.fechanac);
             cmd.Parameters.AddWithValue("@sexo", actor.sexo);
-            cmd.Parameters.AddWithValue("@idfoto", actor.idfoto);
             
-            cmd.ExecuteNonQuery();
+            var nuevoid = Convert.ToInt32(cmd.ExecuteScalar());
             conexion.Close();
+
+            return nuevoid;
         }
 
         //Actualizar un actor
@@ -58,7 +59,6 @@ namespace Biblioteca.Web.Datos
             actor.nombre = rdr["nombre"].ToString();
             actor.fechanac = Convert.ToDateTime(rdr["fechanac"]);
             actor.sexo = Convert.ToChar(rdr["sexo"]);
-            actor.idfoto = Convert.ToInt32(rdr["idfoto"]);
             
             conexion.Close();
 
@@ -84,7 +84,6 @@ namespace Biblioteca.Web.Datos
                     actor.nombre = rdr["nombre"].ToString();
                     actor.fechanac = Convert.ToDateTime(rdr["fechanac"]);
                     actor.sexo = Convert.ToChar(rdr["sexo"]);
-                    actor.idfoto = Convert.ToInt32(rdr["idfoto"]);
 
                     lstactor.Add(actor);
                 }
@@ -113,7 +112,6 @@ namespace Biblioteca.Web.Datos
                     actor.nombre = rdr["nombre"].ToString();
                     actor.fechanac = Convert.ToDateTime(rdr["fechanac"]);
                     actor.sexo = Convert.ToChar(rdr["sexo"]);
-                    actor.idfoto = Convert.ToInt32(rdr["idfoto"]);
 
                     lstactor.Add(actor);
                 }

@@ -18,7 +18,5 @@ namespace Biblioteca.Entidades
         public string genero { get; set; }
         [Required]
         public DateTime fechaestreno { get; set; }
-        [Required]
-        public int idfoto { get; set; }
     }
 }

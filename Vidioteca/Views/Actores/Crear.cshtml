@@ -5,13 +5,14 @@
 
 <h1>CrearActor</h1>
 
-@model Actor
+@model Vidioteca.Models.Actor.CrearViewModel
 @{ Layout = "_Layout"; ViewBag.Title = "Agregar Actor";}
  
-<form asp-action="Crear" method="post">
+<form asp-action="Crear" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="nombre">Nombre</label>
         <input class="form-control" asp-for="nombre" />
+        <span asp-validation-for="nombre" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label>Sexo</label>
@@ -23,28 +24,13 @@
     <div class="form-group">
         <label asp-for="fechanac">Fecha Nacimiento</label>
         <input class="form-control" type="date" asp-for="fechanac" />
+        <span asp-validation-for="fechanac" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="foto">Foto</label>
         <input class="form-control" type="file" asp-for="foto" />
     </div>
     <div class="text-center panel-body">
-        <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </div>
 </form>
-@if (Model != null)
-{
-    <h2>Reservation</h2>
-    <table class="table table-sm table-striped table-bordered m-2">
-        <thead><tr><th>ID</th><th>Name</th><th>Start Location</th><th>End Location</th></tr></thead>
-        <tbody>
-        <tr>
-            <td>@Model.idactor</td>
-            <td>@Model.nombre</td>
-            <td>@Model.sexo</td>
-            <td>@Model.fechanac</td>
-            <td>@Model.foto</td>
-        </tr>
-        </tbody>
-    </table>
-}

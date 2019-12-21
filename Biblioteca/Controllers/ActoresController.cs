@@ -39,7 +39,7 @@ namespace Biblioteca.Web.Controllers
                         model.nombre = actor.nombre;
                         model.fechanac = actor.fechanac;
                         model.sexo = actor.sexo;
-                        model.foto = _foto.CargarFoto(actor.idfoto).foto;
+                        model.foto = _foto.CargarFoto(actor.idactor).foto;
 
                         lstmodel.Add(model);
                     }
@@ -74,7 +74,7 @@ namespace Biblioteca.Web.Controllers
                     model.titulo = pelicula.titulo;
                     model.genero = pelicula.genero;
                     model.fechaestreno = pelicula.fechaestreno;
-                    model.foto = _foto_p.CargarFoto(pelicula.idfoto).foto;
+                    model.foto = _foto_p.CargarFoto(pelicula.idpelicula).foto;
 
                     lstmodel.Add(model);
                 }
@@ -99,7 +99,7 @@ namespace Biblioteca.Web.Controllers
                         nombre = actor.nombre,
                         fechanac = actor.fechanac,
                         sexo = actor.sexo,
-                        foto = _foto.CargarFoto(actor.idfoto).foto
+                        foto = _foto.CargarFoto(actor.idactor).foto
                     });
             }
             catch (Exception e)
@@ -126,7 +126,7 @@ namespace Biblioteca.Web.Controllers
                     model.nombre = actor.nombre;
                     model.fechanac = actor.fechanac;
                     model.sexo = actor.sexo;
-                    model.foto = _foto.CargarFoto(actor.idfoto).foto;
+                    model.foto = _foto.CargarFoto(actor.idactor).foto;
 
                     lstmodel.Add(model);
                 }
@@ -153,16 +153,20 @@ namespace Biblioteca.Web.Controllers
                 {
                     nombre = model.nombre,
                     fechanac = DateTime.Parse(model.fechanac),
-                    sexo = Char.Parse(model.sexo.ToUpper()),
-                    idfoto =  _foto.CrearFoto(model.foto)
+                    sexo = Char.Parse(model.sexo.ToUpper())
                 };
 
-                _actor.CrearActor(actor);
+                Actor_Foto foto = new Actor_Foto
+                {
+                    idfoto = _actor.CrearActor(actor),
+                    foto = model.foto
+                };
 
+                _foto.CrearFoto(foto);
             }
             catch (Exception e)
             {
-                return BadRequest("No se pudo guardar el actor \n ");
+                return BadRequest("No se pudo guardar el actor \n "+e);
 
             }
 
@@ -191,7 +195,16 @@ namespace Biblioteca.Web.Controllers
                     actor.nombre = model.nombre;
                     actor.fechanac = DateTime.Parse(model.fechanac);
                     actor.sexo = Char.Parse(model.sexo.ToUpper());
-                    _foto.ActualizarFoto(actor.idfoto, model.foto);
+
+                    if (model.foto != null)
+                    {
+                        Actor_Foto foto = new Actor_Foto
+                        {
+                            idfoto = actor.idactor,
+                            foto = model.foto
+                        };
+                        _foto.ActualizarFoto(foto);
+                    }
 
                     _actor.ActualizarActor(actor);
 

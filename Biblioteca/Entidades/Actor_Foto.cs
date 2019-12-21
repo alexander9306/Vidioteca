@@ -7,6 +7,7 @@ namespace Biblioteca.Entidades
 {
     public class Actor_Foto
     {
+        [Required]
         public int idfoto { get; set; }
         public byte[] foto { get; set; }
     }

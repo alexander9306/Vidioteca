@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Actor>
+﻿@model IEnumerable<Vidioteca.Models.Actor.Actor>
 @{ Layout = "_Layout"; ViewBag.Title = "Todos los actores";}
 
 
@@ -43,14 +43,20 @@
         {
             <tr>
                 <td>@actor.idactor</td>
-                <td width="80" height="80">
-                    @{var imgSrc = String.Format("data:image/jpg;base64,{0}", actor.foto); }
-                    <img src="@imgSrc"/> </td>
+                <td>
+                    @{
+                        string imgSrc = "";
+                        if (actor.foto != null)
+                        {
+                            imgSrc = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(actor.foto));
+                        }
+                    }
+                    <img width="65" height="90" src="@imgSrc"/> </td>
                 <td>@actor.nombre</td>
                 <td>@actor.fechanac.ToString("dd/M/yyyy")</td>
                 <td>@actor.sexo</td>
                 <td>
-                    <a asp-action="Actualizar" asp-route-id="@actor.idactor" class="text-warning">Actualizar</a>
+                    <a asp-action="Actualizar" asp-route-id="@actor.idactor" class="text-success">Actualizar</a>
                 </td>
                 <td>
                     <a asp-action="EliminarVista" asp-route-id="@actor.idactor" class="text-danger">Eliminar</a>

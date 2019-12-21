@@ -13,25 +13,24 @@ namespace Biblioteca.Web.Datos
         SqlCommand cmd;
 
         //Crear una nueva foto
-        public int CrearFoto(byte[] pfoto)
+        public void  CrearFoto(Pelicula_Foto foto)
         {
             conexion.Open();
-            cmd = new SqlCommand("insert into pelicula_foto(foto) values(@foto)", conexion);
+            cmd = new SqlCommand("insert into pelicula_foto(idfoto,foto) values(@idfoto,@foto)", conexion);
 
-            if (pfoto != null)
+            if (foto.foto != null)
             {
-                cmd.Parameters.AddWithValue("@foto", pfoto);
+                cmd.Parameters.AddWithValue("@foto", foto.foto);
             }
             else
             {
                 cmd.Parameters.Add("@foto", SqlDbType.VarBinary, -1).Value = DBNull.Value;
             }
-            cmd.ExecuteNonQuery();
 
-            SqlCommand cargarId = new SqlCommand("SELECT count(*) from actor_foto ", conexion);
-            var nuevoid = Convert.ToInt32(cargarId.ExecuteScalar());
+            cmd.Parameters.AddWithValue("@idfoto", foto.idfoto);
+
+            cmd.ExecuteNonQuery();
             conexion.Close();
-            return nuevoid;
         }
 
         //Cargar una foto
@@ -59,15 +58,15 @@ namespace Biblioteca.Web.Datos
         }
 
         //Actualizar una foto
-        public void ActualizarFoto(int idfoto, byte[] foto)
+        public void ActualizarFoto(Pelicula_Foto foto)
         {
             cmd = new SqlCommand("update pelicula_foto set foto=@foto where idfoto=@idfoto", conexion);
             conexion.Open();
-            cmd.Parameters.AddWithValue("@idfoto", idfoto);
+            cmd.Parameters.AddWithValue("@idfoto", foto.idfoto);
 
-            if (foto != null)
+            if (foto.foto != null)
             {
-                cmd.Parameters.AddWithValue("@foto", foto);
+                cmd.Parameters.AddWithValue("@foto", foto.foto);
             }
             else
             {

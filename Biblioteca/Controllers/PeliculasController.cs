@@ -38,7 +38,7 @@ namespace Biblioteca.Web.Controllers
                     model.titulo = pelicula.titulo;
                     model.genero = pelicula.genero;
                     model.fechaestreno = pelicula.fechaestreno;
-                    model.foto = _foto.CargarFoto(pelicula.idfoto).foto;
+                    model.foto = _foto.CargarFoto(pelicula.idpelicula).foto;
 
                     lstmodel.Add(model);
                 }
@@ -67,7 +67,7 @@ namespace Biblioteca.Web.Controllers
                     model.nombre = actor.nombre;
                     model.fechanac = actor.fechanac;
                     model.sexo = actor.sexo;
-                    model.foto = _foto_a.CargarFoto(actor.idfoto).foto;
+                    model.foto = _foto_a.CargarFoto(actor.idactor).foto;
 
                     lstmodel.Add(model);
                 }
@@ -95,7 +95,7 @@ namespace Biblioteca.Web.Controllers
                     model.titulo = pelicula.titulo;
                     model.genero = pelicula.genero;
                     model.fechaestreno = pelicula.fechaestreno;
-                    model.foto = _foto.CargarFoto(pelicula.idfoto).foto;
+                    model.foto = _foto.CargarFoto(pelicula.idpelicula).foto;
 
                     lstmodel.Add(model);
                 }
@@ -120,7 +120,7 @@ namespace Biblioteca.Web.Controllers
                     titulo = pelicula.titulo,
                     genero = pelicula.genero,
                     fechaestreno = pelicula.fechaestreno,
-                    foto = _foto.CargarFoto(pelicula.idfoto).foto
+                    foto = _foto.CargarFoto(pelicula.idpelicula).foto
                 });
             }
             catch (Exception e)
@@ -147,10 +147,15 @@ namespace Biblioteca.Web.Controllers
                     titulo = model.titulo,
                     genero =model.genero,
                     fechaestreno = DateTime.Parse(model.fechaestreno),
-                    idfoto = _foto.CrearFoto(model.foto)
                 };
 
-                _pelicula.CrearPelicula(pelicula);
+                Pelicula_Foto foto = new Pelicula_Foto
+                {
+                    idfoto = _pelicula.CrearPelicula(pelicula),
+                    foto = model.foto
+                };
+
+                _foto.CrearFoto(foto);
 
             }
             catch (Exception e)
@@ -184,10 +189,18 @@ namespace Biblioteca.Web.Controllers
                     pelicula.titulo = model.titulo;
                     pelicula.genero = model.genero;
                     pelicula.fechaestreno = DateTime.Parse(model.fechaestreno);
-                    _foto.ActualizarFoto(pelicula.idfoto, model.foto);
+
+                    if (model.foto != null)
+                    {
+                        Pelicula_Foto foto = new Pelicula_Foto
+                        {
+                            idfoto = pelicula.idpelicula,
+                            foto = model.foto
+                        };
+                        _foto.ActualizarFoto(foto);
+                    }
 
                     _pelicula.ActualizarPelicula(pelicula);
-
                 }
                 catch (Exception e)
                 {

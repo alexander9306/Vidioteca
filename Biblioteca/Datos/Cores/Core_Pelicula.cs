@@ -12,23 +12,24 @@ namespace Biblioteca.Web.Datos
         SqlCommand cmd;
 
         //Crear una pelicula
-        public void CrearPelicula(Pelicula pelicula)
+        public int CrearPelicula(Pelicula pelicula)
         {
-            cmd = new SqlCommand("insert into pelicula(titulo, genero, fechaestreno, idfoto) values(@titulo,@genero,@fechaestreno,@idfoto)", conexion);
+            cmd = new SqlCommand("insert into pelicula(titulo, genero, fechaestreno, idfoto) values(@titulo,@genero,@fechaestreno); SELECT SCOPE_IDENTITY()", conexion);
             conexion.Open();
             cmd.Parameters.AddWithValue("@titulo", pelicula.titulo);
             cmd.Parameters.AddWithValue("@genero", pelicula.genero);
             cmd.Parameters.AddWithValue("@fechaestreno", pelicula.fechaestreno);
-            cmd.Parameters.AddWithValue("@idfoto", pelicula.idfoto);
 
-            cmd.ExecuteNonQuery();
+            var nuevoid = Convert.ToInt32(cmd.ExecuteScalar());
             conexion.Close();
+
+            return nuevoid;
         }
 
         //Actualizar una pelicula
         public void ActualizarPelicula(Pelicula pelicula)
         {
-            cmd = new SqlCommand("update pelicula set titulo=@titulo, genero=@genero, fechaestreno=@fechaestreno, foto=@foto where idpelicula=@idpelicula", conexion);
+            cmd = new SqlCommand("update pelicula set titulo=@titulo, genero=@genero, fechaestreno=@fechaestreno where idpelicula=@idpelicula", conexion);
             conexion.Open();
             cmd.Parameters.AddWithValue("@titulo", pelicula.titulo);
             cmd.Parameters.AddWithValue("@genero", pelicula.genero);
@@ -51,7 +52,6 @@ namespace Biblioteca.Web.Datos
             pelicula.idpelicula = Convert.ToInt32(rdr["idpelicula"]);
             pelicula.titulo = rdr["titulo"].ToString();
             pelicula.fechaestreno = Convert.ToDateTime(rdr["fechaestreno"]);
-            pelicula.idfoto = Convert.ToInt32(rdr["idfoto"]);
 
             conexion.Close();
 
@@ -76,7 +76,6 @@ namespace Biblioteca.Web.Datos
                     pelicula.idpelicula = Convert.ToInt32(rdr["idpelicula"]);
                     pelicula.titulo = rdr["titulo"].ToString();
                     pelicula.fechaestreno = Convert.ToDateTime(rdr["fechaestreno"]);
-                    pelicula.idfoto = Convert.ToInt32(rdr["idfoto"]);
 
                     lstpelicula.Add(pelicula);
                 }
@@ -102,7 +101,6 @@ namespace Biblioteca.Web.Datos
                     pelicula.idpelicula = Convert.ToInt32(rdr["idpelicula"]);
                     pelicula.titulo = rdr["titulo"].ToString();
                     pelicula.fechaestreno = Convert.ToDateTime(rdr["fechaestreno"]);
-                    pelicula.idfoto = Convert.ToInt32(rdr["idfoto"]);
 
                     lstpelicula.Add(pelicula);
                 }

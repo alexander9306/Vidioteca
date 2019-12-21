@@ -11,28 +11,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Configuration;
-using Vidioteca.Models;
+using Vidioteca.Models.Actor;
 
 namespace Vidioteca.Controllers
 {
     public class ActoresController : Controller
     {
-
-        private IHostingEnvironment hostingEnvironment;
-        public ActoresController(IHostingEnvironment environment)
-        {
-            hostingEnvironment = environment;
-        }
-        [HttpPost("UploadFile")]
-        public async Task<string> UploadFile([FromForm] IFormFile file)
-        {
-            string path = Path.Combine(hostingEnvironment.WebRootPath, "Images/" + file.FileName);
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-            return "http://localhost:8888/Images/" + file.FileName;
-        }
 
         // GET: Actores
         public async Task<IActionResult> Index()
@@ -49,7 +33,7 @@ namespace Vidioteca.Controllers
             return View(lstactor);
         }
       
-        // GET: Actores/Sexo=m
+        // GET: Actores/Sexo/m
         public async Task<IActionResult> Sexo(string sexo)
         {
             List<Actor> lstactor = new List<Actor>();
@@ -69,8 +53,32 @@ namespace Vidioteca.Controllers
         public ViewResult Crear() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Crear(Actor actor)
+        public async Task<IActionResult> Crear(CrearViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            Actor actor = new Actor
+            {
+                nombre = model.nombre,
+                fechanac = model.fechanac,
+                sexo = model.sexo
+            };
+
+            if (model.foto != null)
+            {
+                byte[] fileBytes;
+                using (var ms = new MemoryStream())
+                {
+                    Path.GetExtension(model.foto.FileName);
+                    model.foto.CopyToAsync(ms);
+                    fileBytes = ms.ToArray();
+                }
+                actor.foto = fileBytes;
+            }
+
             using (var httpClient = new HttpClient())
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(actor), Encoding.UTF8, "application/json");
@@ -87,6 +95,10 @@ namespace Vidioteca.Controllers
         // GET: Actores/Actualizar/5
         public async Task<IActionResult> Actualizar(int id)
         {
+            if (id < 1)
+            {
+                return RedirectToAction("Index");
+            }
             Actor actor = new Actor();
             using (var httpClient = new HttpClient())
             {
@@ -96,13 +108,49 @@ namespace Vidioteca.Controllers
                     actor = JsonConvert.DeserializeObject<Actor>(apiResponse);
                 }
             }
-            return View(actor);
+
+            if (actor == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ActualizarViewModel model = new ActualizarViewModel
+            {
+                idactor = actor.idactor,
+                nombre = actor.nombre,
+                fechanac = actor.fechanac,
+                sexo = actor.sexo
+            };
+            return View(model);
         }
 
-        // PUT: Actores/ActualizarActor/5
+        // PUT: Actores/Actualizar/
         [HttpPost]
-        public async Task<IActionResult> Actualizar(Actor actor)
+        public async Task<IActionResult> Actualizar(ActualizarViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            Actor actor = new Actor
+            {
+                idactor = model.idactor,
+                nombre = model.nombre,
+                fechanac = model.fechanac,
+                sexo = model.sexo
+            };
+
+            if (model.foto != null)
+            {
+                byte[] fileBytes;
+                using (var ms = new MemoryStream())
+                {
+                    model.foto.CopyToAsync(ms);
+                    fileBytes = ms.ToArray();
+                }
+                actor.foto = fileBytes;
+            }
 
             using (var httpClient = new HttpClient())
             {
@@ -116,7 +164,7 @@ namespace Vidioteca.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Actores/EliminarActor/5
+        // GET: Actores/EliminarVista/5
         public async Task<IActionResult> EliminarVista(int id)
         {
             Actor actor = new Actor();
