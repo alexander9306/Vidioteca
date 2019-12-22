@@ -28,29 +28,25 @@ namespace Biblioteca.Web.Controllers
             try
             {
                 var actores = _actor.CargarActores();
-                if (actores.Count() >= 1)
+                if (actores.Any())
                 {
-                    var lstmodel = new List<ActorViewModel>();
+                    var lstmodel = actores.Select(actor => new ActorViewModel
+                        {
+                            idactor = actor.idactor,
+                            nombre = actor.nombre,
+                            fechanac = actor.fechanac,
+                            sexo = actor.sexo,
+                            foto = _foto.CargarFoto(actor.idactor).foto
+                        }).ToList();
 
-                    foreach (var actor in actores)
-                    {
-                        var model = new ActorViewModel();
-                        model.idactor = actor.idactor;
-                        model.nombre = actor.nombre;
-                        model.fechanac = actor.fechanac;
-                        model.sexo = actor.sexo;
-                        model.foto = _foto.CargarFoto(actor.idactor).foto;
-
-                        lstmodel.Add(model);
-                    }
                     return Ok(lstmodel);
                 }
 
                 return NoContent();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e);
+                return BadRequest();
             }
            
 
@@ -62,32 +58,24 @@ namespace Biblioteca.Web.Controllers
         {
 
             var peliculas = _elenco.CargarPeliculas(idactor);
-            if (peliculas.Count() >= 1)
+            if (peliculas.Any())
             {
-                var lstmodel = new List<PeliculaViewModel>();
-
-                foreach (var pelicula in peliculas)
-                {
-                    var model = new PeliculaViewModel();
-
-                    model.idpelicula = pelicula.idpelicula;
-                    model.titulo = pelicula.titulo;
-                    model.genero = pelicula.genero;
-                    model.fechaestreno = pelicula.fechaestreno;
-                    model.foto = _foto_p.CargarFoto(pelicula.idpelicula).foto;
-
-                    lstmodel.Add(model);
-                }
+                var lstmodel = peliculas.Select(pelicula => new PeliculaViewModel
+                    {
+                        idpelicula = pelicula.idpelicula,
+                        titulo = pelicula.titulo,
+                        genero = pelicula.genero,
+                        fechaestreno = pelicula.fechaestreno,
+                        foto = _foto_p.CargarFoto(pelicula.idpelicula).foto
+                    }).ToList();
                 return Ok(lstmodel);
             }
-
             return NoContent();
-
         }
 
         // GET: api/Actores/Mostrar/5
         [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> Mostrar([FromRoute] int id)
+        public IActionResult Mostrar([FromRoute] int id)
         {
             try
             {
@@ -102,7 +90,7 @@ namespace Biblioteca.Web.Controllers
                         foto = _foto.CargarFoto(actor.idactor).foto
                     });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -115,21 +103,17 @@ namespace Biblioteca.Web.Controllers
         {
             var actores = _actor.CargarActorSexo(sexo);
             
-            if (actores.Count() >= 1)
+            if (actores.Any())
             {
-                var lstmodel = new List<ActorViewModel>();
-
-                foreach (var actor in actores)
-                {
-                    var model = new ActorViewModel();
-                    model.idactor = actor.idactor;
-                    model.nombre = actor.nombre;
-                    model.fechanac = actor.fechanac;
-                    model.sexo = actor.sexo;
-                    model.foto = _foto.CargarFoto(actor.idactor).foto;
-
-                    lstmodel.Add(model);
-                }
+                var lstmodel = actores.Select(actor => new ActorViewModel
+                    {
+                        idactor = actor.idactor,
+                        nombre = actor.nombre,
+                        fechanac = actor.fechanac,
+                        sexo = actor.sexo,
+                        foto = _foto.CargarFoto(actor.idactor).foto
+                    })
+                    .ToList();
                 return Ok(lstmodel);
             }
 
@@ -139,24 +123,24 @@ namespace Biblioteca.Web.Controllers
 
         // POST: api/Actores/Crear
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] CrearViewModel model)
+        public IActionResult Crear([FromBody] CrearViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+                var allErrors = ModelState.Values.SelectMany(v => v.Errors);
                 return BadRequest(allErrors);
             }
 
             try
             {
-                Actor actor = new Actor
+                var actor = new Actor
                 {
                     nombre = model.nombre,
                     fechanac = DateTime.Parse(model.fechanac),
-                    sexo = Char.Parse(model.sexo.ToUpper())
+                    sexo = char.Parse(model.sexo.ToUpper())
                 };
 
-                Actor_Foto foto = new Actor_Foto
+                var foto = new Actor_Foto
                 {
                     idfoto = _actor.CrearActor(actor),
                     foto = model.foto
@@ -164,9 +148,9 @@ namespace Biblioteca.Web.Controllers
 
                 _foto.CrearFoto(foto);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest("No se pudo guardar el actor \n "+e);
+                return BadRequest("No se pudo guardar el actor \n ");
 
             }
 
@@ -175,7 +159,7 @@ namespace Biblioteca.Web.Controllers
 
         // PUT: api/Actores/Actualizar
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] ActualizarViewModel model)
+        public IActionResult Actualizar([FromBody] ActualizarViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -194,11 +178,11 @@ namespace Biblioteca.Web.Controllers
                 {
                     actor.nombre = model.nombre;
                     actor.fechanac = DateTime.Parse(model.fechanac);
-                    actor.sexo = Char.Parse(model.sexo.ToUpper());
+                    actor.sexo = char.Parse(model.sexo.ToUpper());
 
                     if (model.foto != null)
                     {
-                        Actor_Foto foto = new Actor_Foto
+                        var foto = new Actor_Foto
                         {
                             idfoto = actor.idactor,
                             foto = model.foto
@@ -209,13 +193,13 @@ namespace Biblioteca.Web.Controllers
                     _actor.ActualizarActor(actor);
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return BadRequest("No se pudo guardar los cambios");
                 }
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -225,13 +209,12 @@ namespace Biblioteca.Web.Controllers
 
         // DELETE: api/Actores/Eliminar/5
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> Eliminar([FromRoute] int id)
+        public IActionResult Eliminar([FromRoute] int id)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
-
 
             if (_actor.BorrarActor(id) < 1)
             {

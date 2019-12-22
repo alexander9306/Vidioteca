@@ -30,18 +30,22 @@ namespace Biblioteca.Web.Controllers
             if (peliculas.Count() >= 1)
             {
                 var lstmodel = new List<PeliculaViewModel>();
-
-                foreach (var pelicula in peliculas)
+                await Task.Run(() =>
                 {
-                    var model = new PeliculaViewModel();
-                    model.idpelicula = pelicula.idpelicula;
-                    model.titulo = pelicula.titulo;
-                    model.genero = pelicula.genero;
-                    model.fechaestreno = pelicula.fechaestreno;
-                    model.foto = _foto.CargarFoto(pelicula.idpelicula).foto;
+                    foreach (var pelicula in peliculas)
+                    {
+                        var model = new PeliculaViewModel
+                        {
+                            idpelicula = pelicula.idpelicula,
+                            titulo = pelicula.titulo,
+                            genero = pelicula.genero,
+                            fechaestreno = pelicula.fechaestreno,
+                            foto = _foto.CargarFoto(pelicula.idpelicula).foto
+                        };
 
-                    lstmodel.Add(model);
-                }
+                        lstmodel.Add(model);
+                    }
+                });
                 return Ok(lstmodel);
             }
 
@@ -59,18 +63,22 @@ namespace Biblioteca.Web.Controllers
             {
                 var lstmodel = new List<ActorViewModel>();
 
-                foreach (var actor in actores)
+                await Task.Run(() =>
                 {
-                    var model = new ActorViewModel();
+                    foreach (var actor in actores)
+                    {
+                        var model = new ActorViewModel
+                        {
+                            idactor = actor.idactor,
+                            nombre = actor.nombre,
+                            fechanac = actor.fechanac,
+                            sexo = actor.sexo,
+                            foto = _foto_a.CargarFoto(actor.idactor).foto
+                        };
 
-                    model.idactor = actor.idactor;
-                    model.nombre = actor.nombre;
-                    model.fechanac = actor.fechanac;
-                    model.sexo = actor.sexo;
-                    model.foto = _foto_a.CargarFoto(actor.idactor).foto;
-
-                    lstmodel.Add(model);
-                }
+                        lstmodel.Add(model);
+                    }
+                });
                 return Ok(lstmodel);
             }
 
@@ -90,12 +98,14 @@ namespace Biblioteca.Web.Controllers
 
                 foreach (var pelicula in peliculas)
                 {
-                    var model = new PeliculaViewModel();
-                    model.idpelicula = pelicula.idpelicula;
-                    model.titulo = pelicula.titulo;
-                    model.genero = pelicula.genero;
-                    model.fechaestreno = pelicula.fechaestreno;
-                    model.foto = _foto.CargarFoto(pelicula.idpelicula).foto;
+                    var model = new PeliculaViewModel
+                    {
+                        idpelicula = pelicula.idpelicula,
+                        titulo = pelicula.titulo,
+                        genero = pelicula.genero,
+                        fechaestreno = pelicula.fechaestreno,
+                        foto = _foto.CargarFoto(pelicula.idpelicula).foto
+                    };
 
                     lstmodel.Add(model);
                 }

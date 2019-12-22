@@ -48,7 +48,6 @@ namespace Vidioteca.Controllers
             return View("Index", lstactor);
         }
 
-
         // POST: Actores/CrearActor
         public ViewResult Crear() => View();
 
@@ -69,11 +68,16 @@ namespace Vidioteca.Controllers
 
             if (model.foto != null)
             {
+                if (!VerificarImagen(model.foto))
+                {
+                    ModelState.AddModelError("foto","Solo se admiten archivos .jpg y .png");
+                    return View(model);
+                }
                 byte[] fileBytes;
                 using (var ms = new MemoryStream())
                 {
-                    Path.GetExtension(model.foto.FileName);
-                    model.foto.CopyToAsync(ms);
+                   
+                    await model.foto.CopyToAsync(ms);
                     fileBytes = ms.ToArray();
                 }
                 actor.foto = fileBytes;
@@ -89,6 +93,17 @@ namespace Vidioteca.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        public bool VerificarImagen(IFormFile foto)
+        {
+            string extension = Path.GetExtension(foto.FileName).ToLower();
+            if (extension == ".jpg" || extension == ".png")
+            {
+                return true;
+            }
+
+            return false;
         }
 
 
@@ -143,10 +158,15 @@ namespace Vidioteca.Controllers
 
             if (model.foto != null)
             {
+                if (!VerificarImagen(model.foto))
+                {
+                    ModelState.AddModelError("foto", "Solo se admiten archivos .jpg y .png");
+                    return View(model);
+                }
                 byte[] fileBytes;
                 using (var ms = new MemoryStream())
                 {
-                    model.foto.CopyToAsync(ms);
+                    await model.foto.CopyToAsync(ms);
                     fileBytes = ms.ToArray();
                 }
                 actor.foto = fileBytes;
@@ -178,6 +198,7 @@ namespace Vidioteca.Controllers
             }
             return View(actor);
         }
+        // POST: Actores/Eliminar/5
         [HttpPost] 
         public async Task<IActionResult> Eliminar(int idactor)
         {
