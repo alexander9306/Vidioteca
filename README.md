@@ -11,11 +11,9 @@ Es una aplicacion de manejo de actores y peliculas
 
 ## Mejoras para futuras verciones
 
-*Insertar cuadro de busqueda
+*Terminar Modulo de peliculas
 
-*Terminar el Front-End
-
-*Hacerlo mas amigable para el usuario
+*Buscar peliculas por actor
 
 
 ## Licencia
