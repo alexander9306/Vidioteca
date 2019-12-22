@@ -8,22 +8,20 @@ go
 --La imagen se guardara directamente en la BD para evitar extra configuraciones al gestor de Base de datos. 
 --Una solucion mas recomendable es utilzar FileStream para guardar las rutas de las imagenes
 
-
-create table actor_foto(
-	idfoto int  identity(1,1) constraint pk_actor_foto primary key not null,
-	foto varbinary(max) null --Omitida la restriccion de tipo nulo para que se pueda crear la pelicula sin una foto en el momento
-); 
-go
 create table actor(
 	idactor int  identity(1,1) constraint pk_actor primary key not null,
 	nombre varchar(100) not null,
 	fechanac date not null,
-	sexo char(1) not null check(sexo in('F','M')),
-	idfoto int not null,
-	constraint fk_actor_foto foreign key (idfoto) 
-	references actor_foto(idfoto) ON DELETE CASCADE
+	sexo char(1) not null check(sexo in('F','M'))
 );
 go
+create table actor_foto(
+	idfoto int  constraint pk_actor_foto primary key not null,
+	constraint fk_actor_foto references actor(idactor) ON DELETE CASCADE,
+	foto varbinary(max) null --Omitida la restriccion de tipo nulo para que se pueda crear la pelicula sin una foto en el momento
+); 
+go
+
 
 create table pelicula_foto(
 	idfoto int  identity(1,1) constraint pk_pelicula_foto primary key not null,
