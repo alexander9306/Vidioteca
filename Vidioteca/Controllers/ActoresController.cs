@@ -17,6 +17,8 @@ namespace Vidioteca.Controllers
 {
     public class ActoresController : Controller
     {
+        //Esta es la direccion de la API 
+        private string webApi = "http://localhost:14574/api/";
 
         // GET: Actores
         public async Task<IActionResult> Index()
@@ -24,7 +26,7 @@ namespace Vidioteca.Controllers
             List<Actor> lstactor = new List<Actor>();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("http://localhost:14574/api/actores/listar"))
+                using (var response = await httpClient.GetAsync(webApi+"actores/listar"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     lstactor = JsonConvert.DeserializeObject<List<Actor>>(apiResponse);
@@ -39,7 +41,7 @@ namespace Vidioteca.Controllers
             List<Actor> lstactor = new List<Actor>();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("http://localhost:14574/api/actores/ListarSexo/" + sexo))
+                using (var response = await httpClient.GetAsync(webApi+"actores/ListarSexo/" + sexo))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     lstactor = JsonConvert.DeserializeObject<List<Actor>>(apiResponse);
@@ -68,9 +70,15 @@ namespace Vidioteca.Controllers
 
             if (model.foto != null)
             {
-                if (!VerificarImagen(model.foto))
+                if (!VerificarFoto(model.foto))
                 {
                     ModelState.AddModelError("foto","Solo se admiten archivos .jpg y .png");
+                    return View(model);
+                }
+
+                if (model.foto.Length > 10 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("foto", "El tamaño maximo por foto son 10mb");
                     return View(model);
                 }
                 byte[] fileBytes;
@@ -87,15 +95,15 @@ namespace Vidioteca.Controllers
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(actor), Encoding.UTF8, "application/json");
 
-                using (var response = await httpClient.PostAsync("http://localhost:14574/api/actores/crear", content))
+                using (var response = await httpClient.PostAsync(webApi+"actores/crear", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }
             }
             return RedirectToAction("Index");
         }
-
-        public bool VerificarImagen(IFormFile foto)
+        //Verificar si la foto es .jpg o .png 
+        public bool VerificarFoto(IFormFile foto)
         {
             string extension = Path.GetExtension(foto.FileName).ToLower();
             if (extension == ".jpg" || extension == ".png")
@@ -105,8 +113,6 @@ namespace Vidioteca.Controllers
 
             return false;
         }
-
-
         // GET: Actores/Actualizar/5
         public async Task<IActionResult> Actualizar(int id)
         {
@@ -117,7 +123,7 @@ namespace Vidioteca.Controllers
             Actor actor = new Actor();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("http://localhost:14574/api/actores/mostrar/" + id))
+                using (var response = await httpClient.GetAsync(webApi+"actores/mostrar/" + id))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     actor = JsonConvert.DeserializeObject<Actor>(apiResponse);
@@ -158,9 +164,15 @@ namespace Vidioteca.Controllers
 
             if (model.foto != null)
             {
-                if (!VerificarImagen(model.foto))
+                if (!VerificarFoto(model.foto))
                 {
                     ModelState.AddModelError("foto", "Solo se admiten archivos .jpg y .png");
+                    return View(model);
+                }
+
+                if (model.foto.Length > 10 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("foto", "El tamaño maximo por foto son 10mb");
                     return View(model);
                 }
                 byte[] fileBytes;
@@ -176,7 +188,7 @@ namespace Vidioteca.Controllers
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(actor), Encoding.UTF8, "application/json");
 
-                using (var response = await httpClient.PutAsync("http://localhost:14574/api/actores/actualizar", content))
+                using (var response = await httpClient.PutAsync(webApi+"actores/actualizar", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }
@@ -190,7 +202,7 @@ namespace Vidioteca.Controllers
             Actor actor = new Actor();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("http://localhost:14574/api/actores/mostrar/" + id))
+                using (var response = await httpClient.GetAsync(webApi+"actores/mostrar/" + id))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     actor = JsonConvert.DeserializeObject<Actor>(apiResponse);
@@ -204,7 +216,7 @@ namespace Vidioteca.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.DeleteAsync("http://localhost:14574/api/actores/eliminar/" + idactor))
+                using (var response = await httpClient.DeleteAsync(webApi+"actores/eliminar/" + idactor))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }

@@ -45,13 +45,26 @@
                 <td>@actor.idactor</td>
                 <td>
                     @{
-                        string imgSrc = "";
-                        if (actor.foto != null)
+                        //Conviertir las foto a Base64String 
+                        string ConvertirFoto(byte[] foto)
                         {
-                            imgSrc = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(actor.foto));
-                        }
+                            string imgSrc;
+                            var png = new byte[] { 137, 80, 78, 71 };
+                            var jpeg = new byte[] { 255, 216, 255, 224 };
+                            if (png.SequenceEqual(foto.Take(png.Length)))
+                            {
+                                imgSrc = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(foto));
+                                return imgSrc;
+                            }
+                            if (jpeg.SequenceEqual(foto.Take(jpeg.Length)))
+                            {
+                                imgSrc = String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(foto));
+                                return imgSrc;
+                            }
+                            return "";
+                        };
                     }
-                    <img width="65" height="90" src="@imgSrc"/> </td>
+                    <img width="65" height="90" src="@ConvertirFoto(actor.foto)"/> </td>
                 <td>@actor.nombre</td>
                 <td>@actor.fechanac.ToString("dd/M/yyyy")</td>
                 <td>@actor.sexo</td>

@@ -30,10 +30,12 @@
     <div class="form-group">
         <label asp-for="fechanac">Fecha Nacimiento</label>
         <input class="form-control" type="date" asp-for="fechanac" />
+        <span asp-validation-for="fechanac" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="foto">Foto</label>
         <input class="form-control" asp-for="foto" />
+        <span asp-validation-for="foto" class="text-danger"></span>
     </div>
     <div class="text-center panel-body">
         <button type="submit" class="btn btn-primary">Guardar</button>
